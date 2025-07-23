@@ -4,8 +4,7 @@ import { mainnet, polygon, optimism, arbitrum } from "wagmi/chains";
 
 
 
-
-// 1. Create config directly using getDefaultConfig
+// Create config directly using getDefaultConfig
 export const wagmiConfig = getDefaultConfig({
   appName: "DAO Poll",
   projectId: import.meta.env.VITE_WAGMI_ID, 
@@ -18,5 +17,5 @@ export const wagmiConfig = getDefaultConfig({
   },
 });
 
-// 2. Export chains separately if needed
+// Export chains separately if needed
 export const chains = [mainnet, polygon, optimism, arbitrum];

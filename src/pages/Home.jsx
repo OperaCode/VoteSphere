@@ -73,6 +73,5 @@ style.textContent = `
     100% { transform: translateY(0px); }
   }
 `;
-document.head.appendChild(style);
 
 export default Home;

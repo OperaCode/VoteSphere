@@ -34,7 +34,7 @@ const GET_PROPOSALS = gql`
 `;
 
 const ProposalList = () => {
-  console.log("ProposalList component rendered");
+  // console.log("ProposalList component rendered");
 
   const [selectedSpace, setSelectedSpace] = useState(null);
   const [selectedProposal, setSelectedProposal] = useState(null);
@@ -50,7 +50,7 @@ const ProposalList = () => {
     skip: !selectedSpace,
   });
 
-  console.log("Proposals data:", proposalsData);
+  // console.log("Proposals data:", proposalsData);
 
   if (loading)
     return (

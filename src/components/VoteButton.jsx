@@ -16,16 +16,16 @@ const VoteButton = ({ proposalId, choice, space }) => {
 
       // Validate inputs
       if (!proposalId || typeof proposalId !== "string") {
-        console.error("❌ Invalid proposalId:", proposalId);
+        console.error("Invalid proposalId:", proposalId);
         return;
       }
       const parsedChoice = Number(choice);
       if (isNaN(parsedChoice) || parsedChoice < 1) {
-        console.error("❌ Invalid choice:", choice);
+        console.error("Invalid choice:", choice);
         return;
       }
       if (!address) {
-        console.error("❌ No connected wallet address");
+        console.error("No connected wallet address");
         return;
       }
 
@@ -58,7 +58,7 @@ const VoteButton = ({ proposalId, choice, space }) => {
         timestamp,
       };
 
-      console.log("📝 Message to sign:", message);
+      // console.log("Message to sign:", message);
 
       // Sign typed data
       const signature = await signTypedDataAsync({
@@ -68,7 +68,7 @@ const VoteButton = ({ proposalId, choice, space }) => {
         message,
       });
 
-      console.log("✅ Signature:", signature);
+      // console.log("Signature:", signature);
 
       // Prepare payload for Snapshot hub
       const payload = {
@@ -82,7 +82,7 @@ const VoteButton = ({ proposalId, choice, space }) => {
         sig: signature,
       };
 
-      console.log("🚀 Sending vote payload:", payload);
+      // console.log("Sending vote payload:", payload);
 
       const response = await axios.post(
         "https://hub.snapshot.org/api/msg",
@@ -92,10 +92,10 @@ const VoteButton = ({ proposalId, choice, space }) => {
         }
       );
 
-      console.log("🎉 Vote submitted successfully:", response.data);
+      // console.log("Vote submitted successfully:", response.data);
       alert("Vote submitted!");
     } catch (err) {
-      console.error("❌ SEQ Voting error:", err);
+      console.error(" Voting error:", err);
       alert(`Voting failed: ${err.message || err}`);
     }
   };

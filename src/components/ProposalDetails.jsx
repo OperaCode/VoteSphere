@@ -14,7 +14,7 @@ const ProposalDetail = ({ proposal }) => {
         {proposal.choices.map((choice, index) => (
           <li key={index} className="border p-2 rounded">
             {choice}
-            {/* <VoteButton proposalId={proposal.id} choiceIndex={index + 1} /> */}
+            <VoteButton proposalId={proposal.id} choiceIndex={index + 1} />
           </li>
         ))}
       </ul>
