@@ -2,10 +2,13 @@ import { getDefaultConfig } from "@rainbow-me/rainbowkit";
 import { http } from "wagmi";
 import { mainnet, polygon, optimism, arbitrum } from "wagmi/chains";
 
+
+
+
 // 1. Create config directly using getDefaultConfig
 export const wagmiConfig = getDefaultConfig({
   appName: "DAO Poll",
-  projectId: "b76a3d2bf5adf72596a51e03411fe3ff", // your WalletConnect v2 project ID
+  projectId: import.meta.env.VITE_WAGMI_ID, 
   chains: [mainnet, polygon, optimism, arbitrum],
   transports: {
     [mainnet.id]: http(),
