@@ -4,12 +4,7 @@ import { Link } from "react-router-dom";
 const Landing = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-indigo-900 to-black text-white flex flex-col items-center justify-center px-4 sm:px-6 lg:px-8 overflow-hidden">
-      {/* Animated background particles */}
-      <div className="absolute inset-0 pointer-events-none">
-        <div className="animate-float absolute w-2 h-2 bg-cyan-400 rounded-full opacity-20 top-10 left-20"></div>
-        <div className="animate-float-slow absolute w-3 h-3 bg-blue-500 rounded-full opacity-20 bottom-20 right-20"></div>
-        <div className="animate-float-fast absolute w-1 h-1 bg-purple-400 rounded-full opacity-20 top-40 left-40"></div>
-      </div>
+      
 
       {/* Logo and Title */}
       <div className="relative z-10 text-center">
@@ -43,30 +38,6 @@ const Landing = () => {
   );
 };
 
-// Inline styles for animations
-const style = document.createElement("style");
-style.textContent = `
-  .animate-pulse-slow {
-    animation: pulse 6s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-  }
-  .animate-float {
-    animation: float 8s ease-in-out infinite;
-  }
-  .animate-float-slow {
-    animation: float 12s ease-in-out infinite;
-  }
-  .animate-float-fast {
-    animation: float 5s ease-in-out infinite;
-  }
-  @keyframes pulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.8; }
-  }
-  @keyframes float {
-    0% { transform: translateY(0px); }
-    50% { transform: translateY(-20px); }
-    100% { transform: translateY(0px); }
-  }
-`;
+
 
 export default Landing;

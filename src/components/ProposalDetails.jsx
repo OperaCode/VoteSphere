@@ -1,3 +1,4 @@
+
 import React from "react";
 
 const ProposalDetail = ({ proposal }) => {
@@ -12,7 +13,7 @@ const ProposalDetail = ({ proposal }) => {
       <h3 className="font-semibold mb-2">Choices:</h3>
       <ul className="space-y-2">
         {proposal.choices.map((choice, index) => (
-          <li key={index} className="border p-2 rounded">
+          <li key={index} className="border p-2 rounded gap-2">
             {choice}
             <VoteButton proposalId={proposal.id} choiceIndex={index + 1} />
           </li>

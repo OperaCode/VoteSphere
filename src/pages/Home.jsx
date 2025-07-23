@@ -6,12 +6,7 @@ import { Link } from "react-router-dom";
 const Home = () => {
   return (
     <div className="min bg-gradient-to-br from-gray-900 via-indigo-900 to-black text-white px-4 sm:px-6 lg:px-8 py-16 relative overflow-hidden">
-      {/* Animated background particles */}
-      <div className="absolute inset-0 pointer-events-none">
-        <div className="animate-float absolute w-2 h-2 bg-cyan-400 rounded-full opacity-20 top-20 left-10"></div>
-        <div className="animate-float-slow absolute w-3 h-3 bg-blue-500 rounded-full opacity-20 bottom-30 right-16"></div>
-        <div className="animate-float-fast absolute w-1 h-1 bg-purple-400 rounded-full opacity-20 top-60 left-60"></div>
-      </div>
+      
 
       {/* Header */}
       <header className="relative z-10 flex justify-between items-center mb-12 max-w-7xl mx-auto">
@@ -55,23 +50,6 @@ const Home = () => {
   );
 };
 
-// Inline styles for animations
-const style = document.createElement("style");
-style.textContent = `
-  .animate-float {
-    animation: float 8s ease-in-out infinite;
-  }
-  .animate-float-slow {
-    animation: float 12s ease-in-out infinite;
-  }
-  .animate-float-fast {
-    animation: float 5s ease-in-out infinite;
-  }
-  @keyframes float {
-    0% { transform: translateY(0px); }
-    50% { transform: translateY(-20px); }
-    100% { transform: translateY(0px); }
-  }
-`;
+
 
 export default Home;

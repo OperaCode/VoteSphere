@@ -55,7 +55,7 @@ const VoteButton = ({ proposalId, choice, space }) => {
         space: space,
         proposal: proposalId,
         choice: parsedChoice,
-        metadata: JSON.stringify({}), // adjust if you want extra data
+        metadata: JSON.stringify({}), 
         from: address,
         timestamp,
       };

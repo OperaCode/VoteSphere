@@ -1,4 +1,4 @@
-// components/ProposalCard.jsx
+
 import React from "react";
 
 const ProposalCard = ({ proposal }) => {
