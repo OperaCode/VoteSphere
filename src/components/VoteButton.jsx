@@ -1,14 +1,11 @@
 import React, { useState } from "react";
 import { useAccount, useSignMessage } from "wagmi";
-import snapshot from "@snapshot-labs/snapshot.js";
+import axios from "axios";
 import { toast } from "react-toastify";
-
-// Initialize Snapshot client
-const snapshotClient = new snapshot.Client("https://hub.snapshot.org");
 
 const VoteButton = ({ proposal, choiceIndex }) => {
   const { address, isConnected } = useAccount();
-  const { signMessageAsync } = useSignMessage();
+  const { signMessageAsync } = useSignMessage(); 
   const [loading, setLoading] = useState(false);
 
  const handleVote = async () => {
@@ -27,33 +24,40 @@ const VoteButton = ({ proposal, choiceIndex }) => {
     const space = proposal.space.id;
     const proposalId = proposal.id;
     const choice = choiceIndex + 1;
+    const timestamp = Math.floor(Date.now() / 1000).toString();
 
-    const receipt = await snapshotClient.vote(
-      address,
+    const msgPayload = {
+      version: "0.1.4",
+      timestamp,
       space,
-      proposalId,
-      choice,
-      async (message) => {
-        const signature = await signMessageAsync({ message });
-        console.log("Signature:", signature);
+      type: "vote",
+      payload: {
+        proposal: proposalId,
+        choice,
+        metadata: {},
+      },
+    };
 
-        // ✅ Return an object with BOTH signature and reason
-        return {
-          signature,
-          reason: "", // Empty string allowed if no reason is needed
-        };
-      }
-    );
+    const signature = await signMessageAsync({
+      message: JSON.stringify(msgPayload),
+    });
 
-    console.log("Vote success:", receipt);
+    console.log("Signed payload:", { address, msgPayload, signature });
+
+    const res = await axios.post("https://hub.snapshot.org/api/msg", {
+      address,
+      sig: signature,
+      data: msgPayload,
+    });
+
+    console.log("Vote response:", res.data);
     toast.success("Vote submitted successfully!");
   } catch (err) {
     console.error("Voting error:", err);
-    toast.error("Failed to vote. " + (err?.message || "Unknown error"));
+    toast.error("Failed to vote. " + (err?.response?.data?.error_description || err.message));
   }
   setLoading(false);
 };
-
 
 
 
@@ -61,7 +65,7 @@ const VoteButton = ({ proposal, choiceIndex }) => {
     <button
       onClick={handleVote}
       disabled={loading}
-      className="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700 transition text-sm"
+      className="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700 transition"
     >
       {loading ? "Voting..." : "Vote"}
     </button>
