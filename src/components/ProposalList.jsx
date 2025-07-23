@@ -155,8 +155,9 @@ const ProposalList = () => {
                   <li key={index} className="py-1">
                     {choice}
                     <VoteButton
-                      proposal={selectedProposal}
-                      choiceIndex={index}
+                      proposalId={selectedProposal.id}
+                      choice={index + 1}
+                      space={selectedProposal.space.id}
                     />
                   </li>
                 ))}

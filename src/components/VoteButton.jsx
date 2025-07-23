@@ -1,73 +1,111 @@
-import React, { useState } from "react";
-import { useAccount, useSignMessage } from "wagmi";
+import React from "react";
+import { useAccount, useSignTypedData } from "wagmi";
 import axios from "axios";
-import { toast } from "react-toastify";
 
-const VoteButton = ({ proposal, choiceIndex }) => {
-  const { address, isConnected } = useAccount();
-  const { signMessageAsync } = useSignMessage(); 
-  const [loading, setLoading] = useState(false);
+const VoteButton = ({ proposalId, choice, space }) => {
+  const { address } = useAccount();
 
- const handleVote = async () => {
-  if (!isConnected) {
-    toast.error("Please connect your wallet to vote.");
-    return;
-  }
+  const { signTypedDataAsync } = useSignTypedData();
 
-  if (!proposal?.id || !proposal?.space?.id) {
-    toast.error("Invalid proposal data.");
-    return;
-  }
+  const handleVote = async () => {
+    try {
+      console.log("🔎 Voting initiated");
+      console.log("Proposal ID:", proposalId);
+      console.log("Choice:", choice);
+      console.log("Address:", address);
 
-  setLoading(true);
-  try {
-    const space = proposal.space.id;
-    const proposalId = proposal.id;
-    const choice = choiceIndex + 1;
-    const timestamp = Math.floor(Date.now() / 1000).toString();
+      // Validate inputs
+      if (!proposalId || typeof proposalId !== "string") {
+        console.error("❌ Invalid proposalId:", proposalId);
+        return;
+      }
+      const parsedChoice = Number(choice);
+      if (isNaN(parsedChoice) || parsedChoice < 1) {
+        console.error("❌ Invalid choice:", choice);
+        return;
+      }
+      if (!address) {
+        console.error("❌ No connected wallet address");
+        return;
+      }
 
-    const msgPayload = {
-      version: "0.1.4",
-      timestamp,
-      space,
-      type: "vote",
-      payload: {
+      const timestamp = Math.floor(Date.now() / 1000);
+      console.log("Timestamp:", timestamp);
+
+      // Prepare domain, types, and message
+      const domain = {
+        name: "snapshot",
+        version: "0.1.4",
+      };
+
+      const types = {
+        Vote: [
+          { name: "space", type: "string" },
+          { name: "proposal", type: "string" },
+          { name: "choice", type: "uint32" },
+          { name: "metadata", type: "string" },
+          { name: "from", type: "address" },
+          { name: "timestamp", type: "uint64" },
+        ],
+      };
+
+      const message = {
+        space: space,
         proposal: proposalId,
-        choice,
-        metadata: {},
-      },
-    };
+        choice: parsedChoice,
+        metadata: JSON.stringify({}), // adjust if you want extra data
+        from: address,
+        timestamp,
+      };
 
-    const signature = await signMessageAsync({
-      message: JSON.stringify(msgPayload),
-    });
+      console.log("📝 Message to sign:", message);
 
-    console.log("Signed payload:", { address, msgPayload, signature });
+      // Sign typed data
+      const signature = await signTypedDataAsync({
+        domain,
+        types,
+        primaryType: "Vote",
+        message,
+      });
 
-    const res = await axios.post("https://hub.snapshot.org/api/msg", {
-      address,
-      sig: signature,
-      data: msgPayload,
-    });
+      console.log("✅ Signature:", signature);
 
-    console.log("Vote response:", res.data);
-    toast.success("Vote submitted successfully!");
-  } catch (err) {
-    console.error("Voting error:", err);
-    toast.error("Failed to vote. " + (err?.response?.data?.error_description || err.message));
-  }
-  setLoading(false);
-};
+      // Prepare payload for Snapshot hub
+      const payload = {
+        address,
+        data: {
+          domain,
+          types,
+          message,
+          primaryType: "Vote",
+        },
+        sig: signature,
+      };
 
+      console.log("🚀 Sending vote payload:", payload);
 
+      const response = await axios.post(
+        "https://hub.snapshot.org/api/msg",
+        payload,
+        {
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+
+      console.log("🎉 Vote submitted successfully:", response.data);
+      alert("Vote submitted!");
+    } catch (err) {
+      console.error("❌ SEQ Voting error:", err);
+      alert(`Voting failed: ${err.message || err}`);
+    }
+  };
 
   return (
     <button
       onClick={handleVote}
-      disabled={loading}
-      className="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700 transition"
+      className="bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700"
     >
-      {loading ? "Voting..." : "Vote"}
+      Vote
     </button>
   );
 };
