@@ -1,6 +1,7 @@
 import React from "react";
 import { useAccount, useSignTypedData } from "wagmi";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 const VoteButton = ({ proposalId, choice, space }) => {
   const { address } = useAccount();
@@ -9,10 +10,11 @@ const VoteButton = ({ proposalId, choice, space }) => {
 
   const handleVote = async () => {
     try {
-      console.log("🔎 Voting initiated");
-      console.log("Proposal ID:", proposalId);
-      console.log("Choice:", choice);
-      console.log("Address:", address);
+      // Debug Lines
+      // console.log("🔎 Voting initiated");
+      // console.log("Proposal ID:", proposalId);
+      // console.log("Choice:", choice);
+      // console.log("Address:", address);
 
       // Validate inputs
       if (!proposalId || typeof proposalId !== "string") {
@@ -93,10 +95,10 @@ const VoteButton = ({ proposalId, choice, space }) => {
       );
 
       // console.log("Vote submitted successfully:", response.data);
-      alert("Vote submitted!");
+      toast.error("Vote submitted!");
     } catch (err) {
       console.error(" Voting error:", err);
-      alert(`Voting failed: ${err.message || err}`);
+      toast.error(`Voting failed: ${err.message || err}`);
     }
   };
 

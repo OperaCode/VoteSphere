@@ -75,7 +75,7 @@ const ProposalList = () => {
             <li
               key={space.id}
               onClick={() => {
-                console.log("Clicked space:", space.id);
+                // console.log("Clicked space:", space.id);
                 setSelectedSpace(space.id);
                 setSelectedProposal(null);
               }}
